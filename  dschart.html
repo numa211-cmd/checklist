@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>DS壁紙出力マニュアル</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --check-color: #27ae60;
+            --bg-color: #f4f7f6;
+            --step-bg: #ffffff;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-size: 24px; }
+        .folder-name { color: #f1c40f; font-weight: bold; }
+
+        /* Step Navigation */
+        .step-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            background: var(--step-bg);
+            border-left: 8px solid var(--primary-color);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .step-title {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .step-num {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        /* 警告・重要パーツ */
+        .important {
+            background: #fff3cd;
+            border: 2px solid #ffeeba;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .alert {
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 5px 10px;
+            display: inline-block;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        /* 出力設定エリア */
+        .config-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .file-name {
+            background: #fff;
+            padding: 8px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            border: 1px solid #cbd5e0;
+        }
+
+        /* 検査ルールエリア */
+        .inspection-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .inspection-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        /* 完了済みサイン */
+        .stamp {
+            border: 3px double red;
+            color: red;
+            padding: 5px;
+            transform: rotate(-10deg);
+            display: inline-block;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+        }
+
+        .highlight-blue { border-left-color: #3498db; }
+        .highlight-green { border-left-color: #27ae60; }
+        .highlight-red { border-left-color: #e74c3c; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>DS壁紙 出力オペレーション</h1>
+        <p>最終データ名：📁<span class="folder-name">LSS_DS壁紙_AB本番仕様</span></p>
+    </header>
+
+    <div class="step highlight-red">
+        <div class="step-title"><div class="step-num">!</div>【初回限定】承認プロセス</div>
+        <ol>
+            <li>端材でAまたはBを1枚出力 → <strong>クリアコート</strong>を掛ける</li>
+            <li>
+                <span class="stamp">2/2 認証済み</span> サイン入りの現物と<strong>カットして突き合わせ</strong>
+            </li>
+            <li>OKなら本番へ移行</li>
+        </ol>
+    </div>
+
+    <div class="step highlight-blue">
+        <div class="step-title"><div class="step-num">1</div>事前チェック & 測色</div>
+        <div class="config-box">
+            <div>
+                <strong>検査チャート出力：</strong>
+                <div class="file-name">LSS_Disney検査chart</div>
+            </div>
+            <div>
+                <strong>測色機比較：</strong>
+                <p>マスターと ΔE を計測、数値を表に記入。OKなら次へ</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-title"><div class="step-num">2</div>本番出力実行</div>
+        <p class="alert">設定：クリアコート ＋ 巻き取り【内巻き】</p>
+        <div class="config-box">
+            <div>
+                <strong>Aスタート：</strong>
+                <div class="file-name">LSS_Disney客室A_start_A12_B11_1</div>
+            </div>
+            <div>
+                <strong>Bスタート：</strong>
+                <div class="file-name">LSS_Disney客室B_start_A11_B12_1</div>
+            </div>
+        </div>
+        <div class="important">
+            ※描き始めお尻側から出ていればOK<br>
+            ※検査用チップに【ロット番号・日付】を記入（カットしない）
+        </div>
+    </div>
+
+    <div class="step highlight-green">
+        <div class="step-title"><div class="step-num">3</div>検査ルール（ボツは大きく「×」）</div>
+        <div class="inspection-grid">
+            <div class="inspection-item">
+                <strong>検査1</strong><br>
+                出力始めの<br>チャート検査
+            </div>
+            <div class="inspection-item">
+                <strong>検査2</strong><br>
+                ろく郎による<br>検査
+            </div>
+            <div class="inspection-item">
+                <strong>検査3</strong><br>
+                最終検査<br>(目視補完)
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-title"><div class="step-num">4</div>梱包・発送</div>
+        <ul>
+            <li>検査用チップをカットして保管</li>
+            <li>最終梱包枚数を<strong>検査表</strong>へ記入</li>
+            <li>ロットシールに枚数を記入し、<strong>2か所</strong>に貼付</li>
+        </ul>
+        <div class="important" style="background: #d4edda; border-color: #c3e6cb;">
+            ★ 本番一本目（ファーストロット）は LSSに送付！
+        </div>
+    </div>
+
+    <footer>
+        &copy; Hataya Co., Ltd. Digital Print Group
+    </footer>
+</div>
+
+</body>
+</html>
