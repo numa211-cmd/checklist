@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --danger-color: #e63946;
+            --warning-color: #ffbe0b;
+            --info-color: #0077b6;
+            --black-accent: #212529;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --head-width: 120px; /* 共通定義 */
+            --board-width: 200px; /* 共通定義 */
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #e9ecef;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 4px solid var(--black-accent);
+            padding-bottom: 10px;
+            color: var(--black-accent);
+        }
+
+        h2 {
+            background: var(--black-accent);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 40px;
+        }
+
+        .alert-box {
+            background: #fff3f3;
+            border-left: 5px solid var(--danger-color);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* 捨てパス図解 */
+        .waste-pass-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #eee;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .board {
+            width: 200px;
+            height: 150px;
+            background: white;
+            border: 2px solid #999;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .waste-line {
+            position: absolute;
+            background: linear-gradient(to right, cyan, magenta, yellow, black);
+            opacity: 0.8;
+        }
+
+        .line-left { width: 10px; height: 100%; left: -15px; }
+        .line-right { width: 10px; height: 100%; right: -15px; }
+        .line-front { width: 100%; height: 10px; bottom: -15px; left: 0; }
+        .line-back { width: 100%; height: 10px; top: -15px; left: 0; }
+
+        /* ギャップ設定テーブル */
+        .gap-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .gap-table th, .gap-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .gap-table th { background: #f2f2f2; }
+        
+        .best-quality { background: #d1e7dd; font-weight: bold; }
+        .standard { background: #fff3cd; }
+        .rough { background: #f8d7da; }
+
+        /* --- 修正箇所：ギャップ概念図 --- */
+        .gap-illustration {
+            width: 100%;
+            border-bottom: 4px solid #555;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* 左寄せにして位置を調整 */
+            position: relative;
+        }
+
+        /* ヘッドとGAPラベルを包含するブロック */
+        .head-and-gap {
+            width: var(--head-width);
+            text-align: center;
+            /* 修正の肝：素材の中心（-10pxは線幅補正）と、ヘッドの中心を合わせる offset */
+            left: calc(50% + 50px - (var(--head-width) / 2) - 10px); 
+            margin-bottom: 30px; /* ここがギャップ */
+            position: relative; /* GAPラベルの絶対配置の基準 */
+        }
+
+        .head {
+            width: 100%;
+            height: 40px;
+            background: #666;
+            color: white;
+            line-height: 40px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* GAPラベル */
+        .head-gap-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--danger-color);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* 包含コンテナ */
+        .board-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            left: 50px; /* 右側のグレー素材の全体的な位置調整 */
+        }
+
+        .board-sample {
+            width: var(--board-width);
+            height: 20px;
+            background: #bbb;
+        }
+        /* --- 修正箇所終了 --- */
+
+        /* リタック調整図 */
+        .retack-visual {
+            background: #fdfdfd;
+            border: 2px dashed #ccc;
+            width: 150px;
+            height: 100px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .retack-sticker {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 30px;
+            background: rgba(0, 123, 255, 0.2);
+            border: 1px solid #007bff;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .check-pattern {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            width: 25px;
+            height: 15px;
+            background: repeating-linear-gradient(90deg, #000, #000 2px, transparent 2px, transparent 4px);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            color: white;
+            margin-right: 5px;
+        }
+        .bg-red { background: var(--danger-color); }
+        .bg-black { background: var( --black-accent); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>大判フラットベッド出力：必須ナレッジ図解</h1>
+
+    <h2>1. 捨てパス（ステパス）の配置と重要性</h2>
+    <div class="alert-box">
+        <strong>特にブラック（K）に注意！</strong><br>
+        パージ直後でないとすぐにノズルが乾き、ミストの原因になります。細かい黒文字・プラダン＋プライマー時は厳守。
+    </div>
+
+    <div class="waste-pass-visual">
+        <div class="board">
+            印刷対象（板物）
+            <div class="waste-line line-left"></div>
+            <div class="waste-line line-right"></div>
+            <div class="waste-line line-front"></div>
+            <div class="waste-line line-back" style="border: 1px dashed red;"></div>
+        </div>
+        <div style="font-size: 0.9em; max-width: 300px;">
+            <ul>
+                <li><strong>基本：</strong> 手前 or 左右に配置</li>
+                <li><strong>特殊：</strong> 奥側に配置（トップダウン印刷時）</li>
+                <li><strong>板物：</strong> 余白がない場合、別板を横に設置</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>2. 印刷ギャップ（ヘッド高）設定値</h2>
+    <p>※AGFA機における「素材表面からヘッドまでの距離」の適正値</p>
+    
+    <div class="gap-illustration">
+        <div class="head-and-gap">
+            <div class="head">PRINT HEAD</div>
+            <div class="head-gap-label">GAP</div>
+        </div>
+        <div class="board-container">
+            <div class="board-sample"></div>
+        </div>
+    </div>
+    <table class="gap-table">
+        <thead>
+            <tr>
+                <th>設定値</th>
+                <th>用途・コンディション</th>
+                <th>備考</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="best-quality">
+                <td>2.5 mm</td>
+                <td>極限の最高画質</td>
+                <td>素材の平滑性必須</td>
+            </tr>
+            <tr class="best-quality">
+                <td>2.7 mm</td>
+                <td>精密印刷</td>
+                <td>高精細なデータ向き</td>
+            </tr>
+            <tr class="standard">
+                <td>3.0 mm</td>
+                <td><strong>標準設定</strong></td>
+                <td>最も安定</td>
+            </tr>
+            <tr class="rough">
+                <td>3.5 mm</td>
+                <td>素材の反り・凹凸あり</td>
+                <td>センサー感知を回避</td>
+            </tr>
+            <tr>
+                <td>4.0 mm</td>
+                <td>パンチカーペット等の特殊材</td>
+                <td>厚みのバラつき対応</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="alert-box" style="margin-top:20px; border-left-color: var(--warning-color);">
+        <strong>Mira設定のコツ：</strong><br>
+        ソフト上の最大値3mmを超えるギャップが必要な場合は、<strong>「実際の板厚 ＋ 余剰ギャップ分」</strong>を板厚として入力し、物理的な高さを確保する。
+    </div>
+
+    <h2>3. 双方向調整 (LR左右往復打点調整)</h2>
+    <p>印刷速度やギャップを変えた際は<strong>必須項目</strong>。機械の初期化誤差も考慮し、毎日実施が理想。</p>
+
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div class="retack-visual">
+            <div class="board" style="width: 100%; height: 100%; font-size: 12px; color: #ccc;">板物（本体）</div>
+            <div class="retack-sticker">
+                透明リタック<br>(10x6cm)
+                <div class="check-pattern"></div>
+            </div>
+        </div>
+        <div>
+            <strong>リタック活用術：</strong>
+            <p>板物には余白がないため、<strong>左下角</strong>に透明リタックを貼り、その上でテストパターンを印刷・確認する。これにより製品を汚さず精密な調整が可能。</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
